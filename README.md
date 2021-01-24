@@ -22,6 +22,38 @@ Calibration targets:
 ## Gazebo plugins
 * Velodyne plugin providing PointCloud2 with same structure as driver (x, y, z, intensity, ring) and simulated Gaussian noise. (Code from [DataspeedInc](https://bitbucket.org/DataspeedInc/velodyne_simulator), although minor patch for vertical resolution issue is included)
 
+## Build
+Compile issues caused by deprecated functions have been fixed by referring to [issues](https://github.com/osrf/car_demo/issues/35)
+
+tested on Ubuntu 18.04 ROS Melodic Gazebo 9.0
+```
+cd ~/catkin_ws/src
+git clone https://github.com/wuhan-geodesy/lidar_simulator.git
+cd ../
+catkin build
+
+```
+
+### Test
+
+1. Download gazebo models from [here](https://github.com/osrf/gazebo_models), and put them to both
+.gazebo/models and /user/share/gazebo-9/models.
+
+2. Run the roslaunch command,
+```
+source ~/catkin_ws/devel/setup.bash
+
+export GAZEBO_PLUGIN_PATH=~/catkin_ws/devel/lib:${GAZEBO_PLUGIN_PATH}
+
+export GAZEBO_MODEL_PATH=~/catkin_ws/src/velo2cam_gazebo/gazebo_models:/usr/share/gazebo-9/models:${GAZEBO_MODEL_PATH}
+
+export GAZEBO_RESOURCE_PATH=~/catkin_ws/src/velo2cam_gazebo/gazebo_models:/usr/share/gazebo-9/models:${GAZEBO_RESOURCE_PATH}
+
+export GAZEBO_MODEL_DATABASE_URI=http://models.gazebosim.org/
+
+roslaunch velo2cam_gazebo single_vlp16_p1_ideal.launch
+```
+
 ## Known Issues
 * Gazebo can take up to 30 seconds to load the VLP-16 pluggin, 60 seconds for the HDL-32E, and much more HDL-64E
 * Gazebo cannot maintain 10Hz with large pointclouds
